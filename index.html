@@ -1,71 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
-	<meta charset="UTF-8">
-	<title>Meet Your Team!</title>
-	<meta name="viewport" content="width=device-width">
+    <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    <meta charset="UTF-8">
+    <title>Meet Your Team!</title>
+    <meta name="viewport" content="width=device-width">
     <link href="style.css" rel="stylesheet" type="text/css" />
     <!-- <link href="https://fonts.googleapis.com/css?family=OpenSans" rel="stylesheet"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- <script src="datastore.js"></script> -->
-    <script src="index.js"></script>
+    <!-- <script src="index.js"></script> -->
 </head>
 <nav>
-
-      <!-- <section style="margin-right: 150px;"> -->
- <!--        <section> -->
-         <ul id="menu">
-         	<li><a href="#"><img src="https://comrom.co/wp-content/uploads/2018/04/Marvel-comics-logo-vector.png" class="marvellogo" alt="Company Logo"></a></li>
-            <li><a href="#">Meet Your Team</a></li>
-            <li><a href="#">Who's Who Game</a></li>   
-         </ul>
-       <!-- </section> -->
-
-    </nav>
-
-  <body>
-  	 <div id="backgroundimage"></div> 
-  <h2>Meet Your Team</h2>
-
-<!-- Need to work on this drop down -->
-<select name="Teams" id="teams">
-    <option value="">--Select Team--</option>
-    <option value="#Administration">Administration</option>
-    <option value="#Business Development">Business Development</option>
-    <option value="#Content">Content</option>
-    <option value="#Design">Design</option>
-    <option value="#Engineering">Engineering</option>
-    <option value="#Finance">Finance</option>
-    <option value="#Human Resources">Human Resources</option>
-    <option value="#Legal">Legal</option>
-    <option value="#Operations">Operations</option>
-    <option value="#Sales">Sales</option>
-  </select>
-<section class="teamMembers">
-    <ul class="memberProfile">
-        <li class="imageBoxes">
-        </li>
-        <li class="descriptionText">
-            Captain America, Captain American blah blah blah text description of who he has and what he has done and where and how and why.
-        </li>
+    <!-- <section style="margin-right: 150px;"> -->
+    <!--        <section> -->
+    <ul id="menu">
+        <li><a href="#"><img src="https://comrom.co/wp-content/uploads/2018/04/Marvel-comics-logo-vector.png" class="marvellogo" alt="Company Logo"></a></li>
+        <li><a href="#">Meet Your Team</a></li>
+        <li><a href="#">Who's Who Game</a></li>
     </ul>
-    <ul class="memberProfile">
-        <li class="imageBoxes">
-        </li>
-        <li class="descriptionText">
-            Captain America, Captain American blah blah blah text description of who he has and what he has done and where and how and why.
-        </li>
-    </ul>
-    <ul class="memberProfile">
-        <li class="imageBoxes">
-        </li>
-        <li class="descriptionText">
-            Captain America, Captain American blah blah blah text description of who he has and what he has done and where and how and why.
-        </li>
-    </ul>
-</section>
+    <div id="backgroundimage"></div>
+</nav>
+
+<body>
+    <section class="mainPage">
+        <h2>Meet Your Team</h2>
+        <!-- Need to work on this drop down -->
+        <select name="Teams" id="teams">
+            <option value="">--Select Team--</option>
+            <option value="#Administration">Administration</option>
+            <option value="#Business Development">Business Development</option>
+            <option value="#Content">Content</option>
+            <option value="#Design">Design</option>
+            <option value="#Engineering">Engineering</option>
+            <option value="#Finance">Finance</option>
+            <option value="#Human Resources">Human Resources</option>
+            <option value="#Legal">Legal</option>
+            <option value="#Operations">Operations</option>
+            <option value="#Sales">Sales</option>
+        </select>
+    </section>
+
+    <section class="profilePage">
+        <ul class="memberProfile">
+            <li class="imageBoxes">
+            </li>
+            <li class="descriptionText">
+                Captain America, Captain American blah blah blah text description of who he has and what he has done and where and how and why.
+            </li>
+        </ul>
+        <ul class="memberProfile">
+            <li class="imageBoxes">
+            </li>
+            <li class="descriptionText">
+                Captain America, Captain American blah blah blah text description of who he has and what he has done and where and how and why.
+            </li>
+        </ul>
+        <ul class="memberProfile">
+            <li class="imageBoxes">
+            </li>
+            <li class="descriptionText">
+                Captain America, Captain American blah blah blah text description of who he has and what he has done and where and how and why.
+            </li>
+        </ul>
+    </section>
+
+    <section class="projectsPage">
+         <ul class="projectHeader">
+         <li class="imageBoxes" "largerImageBox">
+            </li>
+            <li class="teamMemberName"> Beyonce Knowles
+            </li>
+            <!-- should I contain them in a ul too? -->
+        </ul>
+        <ul class="projectProfile">
+            <li class="descriptionText">
+                Captain America, Captain American blah blah blah text description of who he has and what he has done and where and how and why. <a href="https://www.marvel.com" target="_blank">
+                    <!-- use js to do this -->
+            </li>
+        </ul>
+    </section>
+
+    <section class="whoswhoPage">
+    </section>
 
 </body>
 <footer>Data provided by Marvel. © 2014 Marvel</footer>
+
 </html>
