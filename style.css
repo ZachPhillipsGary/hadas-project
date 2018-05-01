@@ -49,6 +49,7 @@ li {
   /*height: 100%; */
   /*text-decoration: none;*/
   /*border: 1px solid blue;*/
+  flex-direction: row;
   padding: 10px;
 }
 
