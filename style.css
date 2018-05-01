@@ -63,9 +63,7 @@ li {
     /*height: 100%; */
     /*text-decoration: none;*/
     /*border: 1px solid blue;*/
-
-    flex-direction: row;
-    padding: 10px;
+    /*flex-direction: row;*/
 }
 
 img.marvellogo {
@@ -102,7 +100,7 @@ nav {
 /*if I want the bg color to only be inside the container use margin*/
 #backgroundimage {
     background-image: url("http://comrom.co/wp-content/uploads/2018/04/Welcome-to-Your-Company-Portal.jpg");
-    /*background-position: center;*/
+    /*backgroundS-position: center;*/
     background-size: contain;
     background-repeat: no-repeat;
     /*margin-bottom: -30px;
@@ -129,29 +127,29 @@ select {
     margin-top: 10px;
 }
 
-.memberProfile,
+/*.memberProfile,
 ul.projectProfile {
     border: black 2px solid;
-    /*flex-direction: column;*/
+    flex-direction: column;
 
     margin-top: 5px;
     padding: 0 10px;
-}
+}*/
 
-.descriptionText {
-    /*border: solid 3px grey;*/
+/*.descriptionText {
+    border: solid 3px grey;
 
     margin-top: 10px;
-}
+}*/
 
-.imageBoxes {
+/*.imageBoxes {
     background-image: url(https://i.annihil.us/u/prod/marvel/i/mg/3/50/537ba56d31087/standard_xlarge.jpg);
     background-position: left;
     background-size: contain;
     background-repeat: no-repeat;
     display: flex;
     width: 300px;
-}
+}*/
 
 .projectHeader {
     width: inherit;
@@ -159,10 +157,10 @@ ul.projectProfile {
 }
 
 .largerImageBox {
-    background-image: url(https://i.annihil.us/u/prod/marvel/i/mg/3/50/537ba56d31087/standard_xlarge.jpg);
-    background-position: left;
+    /*background-image: url(https://i.annihil.us/u/prod/marvel/i/mg/3/50/537ba56d31087/standard_xlarge.jpg);*/
+  /*  background-position: left;
     background-size: contain;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
     /*display: flex;*/
 
     width: 500px;
@@ -181,3 +179,33 @@ ul.projectProfile {
 /*section {
   display:flex;
 }*/
+
+.memberProfile {
+  /*background-color: gray;*/
+  border: 4px solid black;
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 200px;
+  align-content: center;
+  justify-content: center;
+  padding: 10px;
+  margin-left: -49px;
+}
+.memberProfile img {
+  flex-grow: 1;
+  flex-basis: calc(50% - 20px);
+  margin: 10px;
+  min-width: 300px;
+}
+.imageBoxes img{
+  border: 4px solid red;
+  display: block;
+  max-width: 100%;
+}
+.descriptionText {
+  flex-grow: 1;
+  flex-basis: calc(50% - 22px);    /*  22px = 2*10px margin + 2*1px border  */
+  border: 4px solid blue;
+  margin: 10px;
+  min-width: 300px;
+}
