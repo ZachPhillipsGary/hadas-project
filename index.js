@@ -17,4 +17,4 @@ function apiCall() {
             part: 'events'
             maxResults: 7
         }
-    }
+    };
