@@ -95,6 +95,10 @@ img.marvellogo {
   max-width:100px;
 }
 
+.marvellogo {
+  max-width:100px;
+}
+
 a {
   /*align-self: center;*/
   /*margin: auto;*/
