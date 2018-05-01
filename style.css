@@ -1,4 +1,4 @@
-h2, h3, h4 {
+h2, h3, h4, .teamMemberName {
  font-family: "Apercu Pro", sans-serif;
   16px/2 'Apercu Pro', Geneva, Helvetica, Arial, sans-serif;
   font-weight: 500;
@@ -104,11 +104,11 @@ select {
   border: red 3px solid;
 }
 
-.profilePage {
-margin-top:10px
+.profilePage, .mainPage, .projectsPage {
+margin-top:10px;
 }
 
-.memberProfile {
+.memberProfile, ul.projectProfile {
 border: black 2px solid;
 /*flex-direction: column;*/
 margin-top: 5px;
@@ -129,5 +129,30 @@ padding: 0 10px;
     width: 300px;
 }
 
+.projectHeader {
+  width: inherit;
+  display:flex;
+}
 
+.largerImageBox {
+    background-image: url(https://i.annihil.us/u/prod/marvel/i/mg/3/50/537ba56d31087/standard_xlarge.jpg);
+    background-position: left;
+    background-size: contain;
+    background-repeat: no-repeat;
+    /*display: flex;*/
+    width: 500px;
+    /*display:flex;*/
+}
+
+/*.teamMemberName {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: inherit;
+  
+}*/
+
+/*section {
+  display:flex;
+}*/
                 
