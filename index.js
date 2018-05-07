@@ -1,35 +1,15 @@
 // private b9387eb3d701ea1e371e1f554eb585c5
 // public ab730e7076afd4c1be7f21cabdc8b507
 
-const MARVEL_API = 'https://gateway.marvel.com:443/v1/public/characters?apikey=b9387eb3d701ea1e371e1f554eb585c5';
-const MARVEL_COMICS_API = 'https://gateway.marvel.com:443/v1/public/characters/';
-const MARVEL_CHARACTERS_API = 'https://gateway.marvel.com:443/v1/public/characters?eventList&orderBy=-name&limit=7&apikey=ab730e7076afd4c1be7f21cabdc8b507';
-const MARVEL_EVENTS_API = 'https://gateway.marvel.com:443/v1/public/events?orderBy=startDate&limit=7&apikey=ab730e7076afd4c1be7f21cabdc8b507';
 
-function createEventSearchString(limit, key, CharacterList) {
-    return 'https://gateway.marvel.com:443/v1/public/events?characters=' + '-startDate' + '&limit=' + limit + '&apikey=' + key;
-}
-function createCharacterSearchString(limit, key, startDate) {
-    return 'https://gateway.marvel.com:443/v1/public/events/eventID/characters=' + name + '&limit=' + limit + '&apikey=' + key;
-}
-function populateDropdown(data) {
-  var teams=$('#teams');
-  for (var i=0; i < data.length; i++)
-    {$("<option>"+data[i].title+"</option>").appendTo(teams);}
+// search for Events using API
+function createEventSearchString(limit, key, startDate) {
+    return 'https://gateway.marvel.com:443/v1/public/events?orderBy=' + startDate + '&limit=' + limit + '&apikey=' + key;
 }
 
-$(function() {
-    // $('.mainPage').css("display", "flex");
-    // formDropdown();
-    apiCallTeams();
-    apiCallCharacters();
-    // setListenersForMainPage();
-    // setListenersForProfilePage();
-    // setListenersForWhosWhoPage();
-});
-
+// actually call the API that will help grab the teams/events
 function apiCallTeams() {
-    var marvelAPI = createEventSearchString(7, 'ab730e7076afd4c1be7f21cabdc8b507', '-startDate');
+    const marvelAPI = createEventSearchString(7, 'ab730e7076afd4c1be7f21cabdc8b507', '-startDate');
     $.getJSON(marvelAPI, function(result) {
         populateDropdown(result.data.results);
     }).done(function(response) {
@@ -37,8 +17,42 @@ function apiCallTeams() {
     })
 };
 
+// Create the dropdown with the Events from the API
+// Add code that will insert ID as well so we can grab it more easily
+function populateDropdown(data) {
+    const teams = $('#teams');
+    for (let i = 0; i < data.length; i++) {
+        $(`<option class='selectTeam' value='${data[i].id}'>${data[i].title}</option>`).appendTo(teams);
+    }
+}
+//^^data as object should be results
+
+// grab event ID so I can then use the ID to grab the characters
+function getEventId() {
+    $('#teams').on("change", 'selectTeam', function(event) {
+        const eventID = $(this).val();
+        console.log("ID", eventID);
+    });
+}
+
+// catch all document ready function that calls other functions
+$(function() {
+    apiCallTeams();
+    apiCallCharacters();
+    getEventId()
+});
+
+
+
+
+// search for Characters using API
+function createCharacterSearchString(limit, key, id) {
+    return 'https://gateway.marvel.com:443/v1/public/events/eventID/characters=' + 'id' + '&limit=' + limit + '&apikey=' + key;
+}
+
+// actually call the API that will grab the characters/team members
 function apiCallCharacters() {
-    var marvelAPIC = createCharacterSearchString(7, 'ab730e7076afd4c1be7f21cabdc8b507', 'CharacterList');
+    const marvelAPIC = createCharacterSearchString(7, 'ab730e7076afd4c1be7f21cabdc8b507', 'eventID');
     $.getJSON(marvelAPIC, function(result) {
         populateMemberProfileImages(result.data.results);
         populateMemberProfileDescriptions(result.data.results);
@@ -47,79 +61,20 @@ function apiCallCharacters() {
     })
 };
 
+// Create the member profile IMAGES via API info
 function populateMemberProfileImages(data) {
-  var Members=$('.memberProfile');
-  var memberPhotos=$('.imageBoxes');
-  // var memberDescriptions=$('.descriptionText');
-  for (var i=0; i < data.length; i++)
-    {$("<li>"+data[i].thumbnail+"</li").appendTo(memberProfile);}
+    const Members = $('.memberProfile');
+    const memberPhotos = $('.imageBoxes');
+    // const memberDescriptions=$('.descriptionText');
+    for (let i = 0; i < data.length; i++) { $("<li>" + data[i].thumbnail + "</li").appendTo(Members); }
 }
 
+// Create the member profile TEXT via API info
 function populateMemberProfileDescriptions(data) {
-  var Members=$('.memberProfile');
-  // var memberPhotos=$('.imageBoxes');
-  var memberDescriptions=$('.descriptionText');
-  for (var i=0; i < data.length; i++)
-    {$("<li>"+data[i].name.description.series+"</li>").appendTo(Members);}
+    const Members = $('.memberProfile');
+    // const memberPhotos=$('.imageBoxes');
+    const memberDescriptions = $('.descriptionText');
+    for (let i = 0; i < data.length; i++) { $("<li>" + data[i].name.description.series + "</li>").appendTo(Members); }
 }
 
 
-//start with everything hidden so it doesn't have to rerender or display things then hide them
-function hideAllSections() {
-    $('section').hide();
-}
-
-//display the questions when the start button is clicked
-function setListenersForProfilePage() {
-    $('teams').select(function(event) {
-        // alert(2);
-        hideAllSections();
-        // assuming this will be needed when we reload the page by selecting an item? Or is it not like a form?
-        $('.profilePage').show();
-    });
-}
-
-// dynamically create event list
-// this is really tripping me up, might not be necessary for now
-
-$('#teams').select(function(event) {
-    event.preventDefault();
-    let selectedTeam = $('option').val();
-    getRequest(selectedTeam);
-});
-
-function getRequest(selectedTeam) {
-    let params = {
-        part: 'characterLists',
-        key: 'ab730e7076afd4c1be7f21cabdc8b507',
-        q: eventTitle,
-        maxResults: 7
-    };
-    url = 'https://gateway.marvel.com:443/v1/public/events?orderBy=startDate&limit=7&apikey=ab730e7076afd4c1be7f21cabdc8b507';
-    $.getJSON(url, params, function(data) {
-        $('.selectedTeam').val("");
-        $('.js-search-results').html("");
-        showResults(data.items);
-    });
-}
-
-// let dropdown = $('#locality-dropdown');
-
-// dropdown.empty();
-
-// dropdown.append('<option selected="true" disabled>Choose a Team</option>');
-// dropdown.prop('selectedIndex', 0);
-
-// const url = 'https://gateway.marvel.com/v1/public/events/{eventID}';
-
-// // Populate dropdown with list of provinces
-// $.getJSON(url, function (data) {
-//   $.each(data, function (key, entry) {
-//     dropdown.append($('<option></option>').attr('value', entry.abbreviation).text(entry.name));
-//   })
-// });
-
-
-
-
-// };
