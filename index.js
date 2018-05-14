@@ -67,11 +67,12 @@ function populateMemberProfileImages(data) {
     const Members = $('.memberProfile');
     const memberPhotos = $('.imageBoxes');
     // const memberDescriptions = $('.descriptionText');
-    const newImageSRC = 'data[i].thumbnail.path' + 'data[i].thumbnail.extension';
 
 
     for (let i = 0; i < data.length; i++) { 
     
+    const newImageSRC = data[i].thumbnail.path + "." + data[i].thumbnail.extension;
+    // ^^ this variable didn't work because it was outside of the loop and didn't recognize i!
 
     // console.log(thumbnail);
 
@@ -84,15 +85,20 @@ function populateMemberProfileImages(data) {
     let newLI2 = document.createElement("LI");
     newLI2.className="imageBoxes";
 
-    const appendImage = $("<newLI2>" + newImageSRC + "</li>").appendTo(newUL);
-    $("#profPic").attr("src",newImageSRC)
-      console.log(newImageSRC);
+    let teamMemberName = data[i].name;
+
+    const appendImage = $("<newLI2> <img src='" + newImageSRC + "'> </li>").appendTo(newUL);
+
+    // $("#profPic").attr("src",newImageSRC)
+      // console.log(newImageSRC);
+
+// ^^ add LI
 
     $("appendImage").appendTo(memberPhotos); 
 
     $(newUL).appendTo(ProfPage);
 
-    const appendText = $("<newLI>" + data[i].name + "<button onClick='myFunction("+data[i].series.collectionURI+")'>Projects</button></li>").appendTo(newUL);
+    const appendText = $("<newLI>" + teamMemberName + " " + "Learn more about your team member. See what they've been working on and with whom by clicking this button" + "<button onClick='myFunction("+data[i].series.collectionURI+")'>Projects</button></li>").appendTo(newUL);
     // console.log(newUL);
 
       // console.log(data[i]);

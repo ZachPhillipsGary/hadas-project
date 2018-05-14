@@ -78,7 +78,7 @@ img.marvellogo {
 
 a {
     /*align-self: center;*/
-    /*margin: auto;*/
+    margin: 10px;
     /*width: 150px;*/
 
     font-size: 13px;
@@ -155,7 +155,7 @@ ul.projectProfile {
 
 .projectHeader {
   /*width: inherit;*/
-  border: 1px solid black;
+  border: 4px solid black;
   display: flex;
   flex-wrap: wrap;
   min-width: 200px;
@@ -199,8 +199,8 @@ font-size: 200%;
 }*/
 
 .memberProfile {
-  /*background-color: gray;*/
-  border: 1px solid black;
+  background-color: #0C5389;
+  border: 7px solid aliceblue;
   display: flex;
   flex-wrap: wrap;
   min-width: 200px;
@@ -209,24 +209,40 @@ font-size: 200%;
   padding: 10px;
   /*margin-left: -49px;*/
 }
-.memberProfile img {
+.memberProfile img, newUL img {
   flex-grow: 1;
   flex-basis: calc(50% - 20px);
   margin: 10px;
-  min-width: 300px;
+  max-width: 300px;
 }
-.imageBoxes img, .newLI2 img{
-  border: 15px solid red;
+.imageBoxes img, newLI2 img{
+  border: 11px solid white;
   display: block;
   max-width: 100%;
 }
-.descriptionText, .newLI {
+
+newLI {
+  color: white;
+}
+
+.descriptionText, newLI {
   flex-grow: 1;
   flex-basis: calc(50% - 22px);    /*  22px = 2*10px margin + 2*1px border  */
   /*border: 4px solid blue;*/
   margin: 10px;
   min-width: 300px;
       padding: inherit;
+}
+
+button {
+    background-color: aliceblue;
+    color: #0C5389;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 15px;
 }
 
 
