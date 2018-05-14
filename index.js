@@ -32,9 +32,10 @@ function populateDropdown(data) {
 function getEventId() {
     // console.log(eventID);
     $('#teams').on('change', function() {
+        $(".profilePage").empty();
         //^^ we console logged inside the function to see if it brought up anything. It did which meant that it was working!
         //^^ then we console logged this.value and got the value, so now we know that we don't need the $ and () just literally this.value to get the event ID!
-        console.log(this.value);
+        // console.log(this.value);
         const eventID = this.value;
         apiCallCharacters(eventID);
     });
@@ -57,7 +58,7 @@ function apiCallCharacters(eventID) {
     $.getJSON(marvelAPIC, function(result) {
         populateMemberProfileImages(result.data.results);
     }).done(function(response) {
-        console.log("Lets see the response 2 ", response);
+        // console.log("Lets see the response 2 ", response);
     })
 };
 
@@ -74,20 +75,19 @@ function populateMemberProfileImages(data) {
     const newImageSRC = data[i].thumbnail.path + "." + data[i].thumbnail.extension;
     // ^^ this variable didn't work because it was outside of the loop and didn't recognize i!
 
-    // console.log(thumbnail);
-
     let newUL = document.createElement("UL");
     newUL.className="memberProfile";
 
-    let newLI = document.createElement("LI");
-    newLI.className="descriptionText";
-
-    let newLI2 = document.createElement("LI");
-    newLI2.className="imageBoxes";
-
     let teamMemberName = data[i].name;
 
-    const appendImage = $("<newLI2> <img src='" + newImageSRC + "'> </li>").appendTo(newUL);
+    let description = "Learn more about your team member. See what they've been working on and with whom by clicking this button";
+    if (data[i].description.length > 1) {
+      description = data[i].description;
+    }
+
+    const appendImage = $("<li class='newLI2'> <img class='imageBoxes' src='" + newImageSRC + "'> </li>").appendTo(newUL);
+// ^^ clean up class names
+
 
     // $("#profPic").attr("src",newImageSRC)
       // console.log(newImageSRC);
@@ -98,19 +98,25 @@ function populateMemberProfileImages(data) {
 
     $(newUL).appendTo(ProfPage);
 
-    const appendText = $("<newLI>" + teamMemberName + " " + "Learn more about your team member. See what they've been working on and with whom by clicking this button" + "<button onClick='myFunction("+data[i].series.collectionURI+")'>Projects</button></li>").appendTo(newUL);
-    // console.log(newUL);
-
-      // console.log(data[i]);
-    
-     
+    // console.log(data[i].description);
+    const appendText = $("<li class='newLI'>" + teamMemberName + description + "<button onClick='myFunction("+data[i].series.collectionURI+")'>Projects</button></li>").appendTo(newUL);
+   
     // appendText.appendTo(Members);
        }
 }
 
-// myFunction() {
+// function showProjectPage() {
+//   $('#teams').on('change', function() {
+//     // apiCallSeries();
+//     // ^^ create this!
+//     populateProjectPage();
+//   }
 // }
-//^^ make this the populateprofilepage function
+
+// function populateProjectPage() {
+//   const projects = $('.projectHeader');
+//   const projectPhotos = $('.largerImageBox');
+// }
 
 //^^ check out the series link and fixed. Button with on click that calls some javascript, takes eventID and collectionURI as params. 
 
