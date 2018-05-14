@@ -9,11 +9,10 @@ function createEventSearchString(limit, key, startDate) {
 
 // actually call the API that will help grab the teams/events
 function apiCallTeams() {
-    const marvelAPI = createEventSearchString(7, 'ab730e7076afd4c1be7f21cabdc8b507', '-startDate');
+    const marvelAPI = createEventSearchString(10, 'ab730e7076afd4c1be7f21cabdc8b507', '-startDate');
     $.getJSON(marvelAPI, function(result) {
         populateDropdown(result.data.results);
     }).done(function(response) {
-        console.log("Lets see the response ", response);
     })
 };
 
@@ -22,19 +21,15 @@ function apiCallTeams() {
 function populateDropdown(data) {
     const teams = $('#teams');
     for (let i = 0; i < data.length; i++) {
-        $(`<option class='selectTeam' value='${data[i].id}'>${data[i].title}</option>`).appendTo(teams);
+        $(`<option value='${data[i].id}'>${data[i].title}</option>`).appendTo(teams);
     }
 }
-// ^^ may want to remove the selectTeam class
 //^^data as object should be results
 
 // grab event ID so I can then use the ID to grab the characters
 function getEventId() {
-    // console.log(eventID);
     $('#teams').on('change', function() {
         $(".profilePage").empty();
-        //^^ we console logged inside the function to see if it brought up anything. It did which meant that it was working!
-        //^^ then we console logged this.value and got the value, so now we know that we don't need the $ and () just literally this.value to get the event ID!
         // console.log(this.value);
         const eventID = this.value;
         apiCallCharacters(eventID);
@@ -55,51 +50,46 @@ function createCharacterSearchString(eventID, limit, key, modified) {
 // actually call the API that will grab the characters/team members
 function apiCallCharacters(eventID) {
     const marvelAPIC = createCharacterSearchString(eventID, 7, 'ab730e7076afd4c1be7f21cabdc8b507', 'modified');
+    let profileDescription = "Hmm. Looks like this team has been disbanded, abandoned, or is just getting started. Reach out to your supervisor to find out more information.";
+
     $.getJSON(marvelAPIC, function(result) {
-        populateMemberProfileImages(result.data.results);
+        populateMemberProfile(result.data.results);
     }).done(function(response) {
-        // console.log("Lets see the response 2 ", response);
+        if (result.data.results > 1) {
+      profileDescription = result.data.results;
+    }
     })
 };
 
-// Create the member profile IMAGES via API info
-function populateMemberProfileImages(data) {
+// Create the member profiles via API info
+function populateMemberProfile(data) {
     const ProfPage =$('.profilePage');
     const Members = $('.memberProfile');
     const memberPhotos = $('.imageBoxes');
-    // const memberDescriptions = $('.descriptionText');
 
 
     for (let i = 0; i < data.length; i++) { 
     
     const newImageSRC = data[i].thumbnail.path + "." + data[i].thumbnail.extension;
-    // ^^ this variable didn't work because it was outside of the loop and didn't recognize i!
 
     let newUL = document.createElement("UL");
     newUL.className="memberProfile";
 
     let teamMemberName = data[i].name;
 
-    let description = "Learn more about your team member. See what they've been working on and with whom by clicking this button";
+    let description = "Want to learn more about your team member? Since they haven't yet entered their own description, see what they've been working on and with whom by clicking the Projects button below!";
     if (data[i].description.length > 1) {
       description = data[i].description;
     }
 
-    const appendImage = $("<li class='newLI2'> <img class='imageBoxes' src='" + newImageSRC + "'> </li>").appendTo(newUL);
-// ^^ clean up class names
-
-
-    // $("#profPic").attr("src",newImageSRC)
-      // console.log(newImageSRC);
-
-// ^^ add LI
+    const appendImage = $("<li class='imageBoxes'> <img src='" + newImageSRC + "'> </li>").appendTo(newUL);
 
     $("appendImage").appendTo(memberPhotos); 
 
     $(newUL).appendTo(ProfPage);
 
     // console.log(data[i].description);
-    const appendText = $("<li class='newLI'>" + teamMemberName + description + "<button onClick='myFunction("+data[i].series.collectionURI+")'>Projects</button></li>").appendTo(newUL);
+    const appendText = $("<li class='newLI'>" + "<span>" + teamMemberName + "</span>" + description + "<button onClick='showProjectPage("+data[i].series.collectionURI+")'>Projects</button></li>").appendTo(newUL);
    
     // appendText.appendTo(Members);
        }
@@ -121,3 +111,8 @@ function populateMemberProfileImages(data) {
 //^^ check out the series link and fixed. Button with on click that calls some javascript, takes eventID and collectionURI as params. 
 
 
+// function that makes the whosWho nav bar item display the new page
+// function whosWho() {
+//   $('section').hide();
+//   $('#whosWhoPage').show();
+// }
