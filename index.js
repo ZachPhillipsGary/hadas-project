@@ -37,10 +37,7 @@ function getEventId() {
     });
 }
 
-// $('.profilePage').on('click', '.newLI span', function() {
-//     console.log('span');
-// });
-// ^^ this didn't work for some reason
+
 
 // catch all document ready function that calls other functions
 $(function() {
@@ -64,9 +61,9 @@ function apiCallCharacters(eventID) {
         resultData = populateMemberProfile(result.data.results);
         console.log(resultData);
     }).done(function(response) {
-        if (resultData > 1) {
-            profileDescription = resultData;
-        }
+        // if (resultData > 1) {
+        //     profileDescription = resultData;
+        // }
     })
 };
 
@@ -108,11 +105,14 @@ function populateMemberProfile(data) {
 
 // ^^ moved function out of here
 
+// $('.profilePage').on('click', '.newLI span', function() {
+//     console.log('span');
+// });
+// ^^ this didn't work for some reason
 
 // grab characterID so I can then use the ID to grab the Series
 function getCharacterID(id) {
     $(".profilePage").empty();
-    // console.log(this.value);
     console.log("id: " + id, resultData);
     // const characterID = (resultData[i].id);
     apiCallSeries(id);
