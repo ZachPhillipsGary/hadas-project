@@ -2,6 +2,8 @@
 // public ab730e7076afd4c1be7f21cabdc8b507
 
 
+let resultData;
+
 // search for Events using API
 function createEventSearchString(limit, key, startDate) {
     return 'https://gateway.marvel.com:443/v1/public/events?orderBy=' + startDate + '&limit=' + limit + '&apikey=' + key;
@@ -12,8 +14,7 @@ function apiCallTeams() {
     const marvelAPI = createEventSearchString(10, 'ab730e7076afd4c1be7f21cabdc8b507', '-startDate');
     $.getJSON(marvelAPI, function(result) {
         populateDropdown(result.data.results);
-    }).done(function(response) {
-    })
+    }).done(function(response) {})
 };
 
 // Create the dropdown with the Events from the API
@@ -36,11 +37,18 @@ function getEventId() {
     });
 }
 
+// $('.profilePage').on('click', '.newLI span', function() {
+//     console.log('span');
+// });
+// ^^ this didn't work for some reason
+
 // catch all document ready function that calls other functions
 $(function() {
     apiCallTeams();
     getEventId()
+    $('.whosWhoPage').hide();
 });
+// ^^ change name to make sure it's clear
 
 // search for Characters using API
 function createCharacterSearchString(eventID, limit, key, modified) {
@@ -53,117 +61,135 @@ function apiCallCharacters(eventID) {
     let profileDescription = "Hmm. Looks like this team has been disbanded, abandoned, or is just getting started. Reach out to your supervisor to find out more information.";
 
     $.getJSON(marvelAPIC, function(result) {
-        populateMemberProfile(result.data.results);
+        resultData = populateMemberProfile(result.data.results);
+        console.log(resultData);
     }).done(function(response) {
-        if (result.data.results > 1) {
-      profileDescription = result.data.results;
-    }
+        if (resultData > 1) {
+            profileDescription = resultData;
+        }
     })
 };
 
 // Create the member profiles via API info
 function populateMemberProfile(data) {
-    const ProfPage =$('.profilePage');
+    const ProfPage = $('.profilePage');
     const Members = $('.memberProfile');
     const memberPhotos = $('.imageBoxes');
 
+    for (let i = 0; i < data.length; i++) {
 
-    for (let i = 0; i < data.length; i++) { 
-    
-    const newImageSRC = data[i].thumbnail.path + "." + data[i].thumbnail.extension;
+        const newImageSRC = data[i].thumbnail.path + "." + data[i].thumbnail.extension;
 
-    let newUL = document.createElement("UL");
-    newUL.className="memberProfile";
+        let newUL = document.createElement("UL");
+        newUL.className = "memberProfile";
 
-    let teamMemberName = data[i].name;
+        let teamMemberName = data[i].name;
 
-    let description = "Want to learn more about your team member? Since they haven't yet entered their own description, see what they've been working on and with whom by clicking the Projects button below!";
-    if (data[i].description.length > 1) {
-      description = data[i].description;
+        let description = "Want to learn more about your team member? Since they haven't yet entered their own description, see what they've been working on and with whom by clicking the Projects button below!";
+        if (data[i].description.length > 1) {
+            description = data[i].description;
+        }
+
+        const appendImage = $("<li class='imageBoxes'> <img src='" + newImageSRC + "'> </li>").appendTo(newUL);
+
+        $("appendImage").appendTo(memberPhotos);
+
+        $(newUL).appendTo(ProfPage);
+
+        console.log(data[i].id);
+        const appendText = $(`<li class="newLI"><span>${teamMemberName}</span>${description}<button class="projectButton">Projects</button></li>`).appendTo(newUL);
     }
-
-    const appendImage = $("<li class='imageBoxes'> <img src='" + newImageSRC + "'> </li>").appendTo(newUL);
-
-    $("appendImage").appendTo(memberPhotos); 
-
-    $(newUL).appendTo(ProfPage);
-
-    console.log(data[i].id);
-    const appendText = $("<li class='newLI'>" + "<span>" + teamMemberName + "</span>" + description + "<button onClick='populateProjectPage("+data[i].series.collectionURI+")'>Projects</button></li>").appendTo(newUL);
-   
-    // appendText.appendTo(Members);
-       }
+    $('.projectButton').on('click', function() {
+      let i = $(this).closest('.memberProfile').index();
+        getCharacterID(i);
+    });
+    return data;
 }
+
+// ^^ moved function out of here
 
 
 // grab characterID so I can then use the ID to grab the Series
-function getCharacterId() {
-        $(".profilePage").empty();
-        // console.log(this.value);
-        const characterID = this.value;
-        apiCallSeries(eventID);
-};
+function getCharacterID(id) {
+    $(".profilePage").empty();
+    // console.log(this.value);
+    console.log("id: " + id, resultData);
+    // const characterID = (resultData[i].id);
+    apiCallSeries(id);
+}
+// ^^ so far it empties the page but it won't call the apiCallSeries function well
+
 
 // search for Series using API
-function createSeriesSearchString(characterID, limit, key, modified) {
-    return 'https://gateway.marvel.com:443/v1/public/characters/' + characterID + '/series?orderBy=' + modified + '&limit=' + limit + '&apikey=' + key;
+function createSeriesSearchString(id, limit, key, modified) {
+    return 'https://gateway.marvel.com:443/v1/public/characters/' + id + '/series?orderBy=' + modified + '&limit=' + limit + '&apikey=' + key;
 }
 
 // actually call the API that will grab the Series/Projects
-function apiCallSeries(characterID) {
-    const marvelAPIS = createSeriesSearchString(characterID, 7, 'ab730e7076afd4c1be7f21cabdc8b507', 'modified');
+function apiCallSeries(id) {
+    const marvelAPIS = createSeriesSearchString(id, 7, 'ab730e7076afd4c1be7f21cabdc8b507', 'modified');
     let profileDescription = "Hmm. Looks like your team member hasn't had a lot going on. Maybe they like to keep to themselves. Reach out to your team member to find out if they're looking for a chance to get more involved or prefer to work on their own private projects.";
 
     $.getJSON(marvelAPIS, function(result) {
         populateProjectProfile(result.data.results);
     }).done(function(response) {
         if (result.data.results > 1) {
-      projectDescription = result.data.results;
-    }
+            projectDescription = result.data.results;
+        }
     })
 };
 
 // Create the member profiles via API info
 function populateProjectProfile(data) {
-    
+
     // all the naming
     const projPage = $('.projectsPage');
     const projHead = $('.projectHeader');
     const projectPhotos = $('.largerImageBox');
     const Projects = $('.projectProfile');
+    
     let newUL = document.createElement("UL");
-    newUL.className="projectProfile";
+    newUL.className = "projectHeader";
+    
+    let newUL2 = document.createElement("UL");
+    newUL2.className = "projectProfile";
 
-// loop start
-    for (let i = 0; i < data.length; i++) { 
+    // loop start
+    for (let i = 0; i < data.length; i++) {
 
-// loop specific naming
-    const profImageSRC = data[i].thumbnail.path + "." + data[i].thumbnail.extension;
-    let projectName = data[i].name;
+        // loop specific naming
+        const profImageSRC = data[i].thumbnail.path + "." + data[i].thumbnail.extension;
+        let projectName = data[i].name;
 
-// filler text for profiles without descriptions
-    let description = "It seems like your team members didn't get a chance to write a description about their project. Reach out to your supervisor to find out more.";
-    if (data[i].description.length > 1) {
-      description = data[i].description;
+        // filler text for profiles without descriptions
+        let description = "It seems like your team members didn't get a chance to write a description about their project. Reach out to your supervisor to find out more.";
+        if (data[i].description.length > 1) {
+            description = data[i].description;
+        }
+
+
+        // appendages to projectHeader of NAME and IMAGE
+        const appendProfileImage = $("<li class='largerImageBox'> <img src='" + profImageSRC + "'> </li>").appendTo(newUL);
+
+        $("appendProfileImage").appendTo(projectPhotos);
+
+        const appendText1 = $("<li class='teamMemberName'>" + projectName + "</li>").appendTo(newUL);
+
+        $(newUL).appendTo(profPage);
+
+        // appendages to projectProfile
+        const appendText2 = $("<li class='descriptionText'>" + projectName + "</li>").appendTo(newUL2);
+
+        $(newUL2).appendTo(profPage);
     }
-
-// appendages
-    const appendProfileImage = $("<li class='largerImageBox'> <img src='" + profImageSRC + "'> </li>").appendTo(newUL);
-
-    $("appendProfileImage").appendTo(projectPhotos); 
-
-    $(newUL).appendTo(profPage);
-       }
 }
 
-
-
-
-//^^ check out the series link and fixed. Button with on click that calls some javascript, takes eventID and collectionURI as params. 
-
+// event listener for whos who button
+$('.whosWho').on('click', function(whosWho) {
+});
 
 // function that makes the whosWho nav bar item display the new page
-// function whosWho() {
-//   $('section').hide();
-//   $('#whosWhoPage').show();
-// }
+function whosWho() {
+  $('section').hide();
+  $('#whosWhoPage').show();
+}
