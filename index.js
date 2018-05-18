@@ -12,9 +12,9 @@ function createEventSearchString(limit, key, startDate) {
 // actually call the API that will help grab the teams/events
 function apiCallTeams() {
     const marvelAPI = createEventSearchString(10, 'ab730e7076afd4c1be7f21cabdc8b507', '-startDate');
-    $.getJSON(marvelAPI, function(result) {
+    $.getJSON(marvelAPI, function (result) {
         populateDropdown(result.data.results);
-    }).done(function(response) {})
+    }).done(function (response) {})
 };
 
 // Create the dropdown with the Events from the API
@@ -29,7 +29,7 @@ function populateDropdown(data) {
 
 // grab event ID so I can then use the ID to grab the characters
 function getEventId() {
-    $('#teams').on('change', function() {
+    $('#teams').on('change', function () {
         $(".profilePage").empty();
         // console.log(this.value);
         const eventID = this.value;
@@ -39,12 +39,7 @@ function getEventId() {
 
 
 
-// catch all document ready function that calls other functions
-$(function() {
-    apiCallTeams();
-    getEventId()
-    $('.whosWhoPage').hide();
-});
+
 // ^^ change name to make sure it's clear
 
 // search for Characters using API
@@ -57,13 +52,15 @@ function apiCallCharacters(eventID) {
     const marvelAPIC = createCharacterSearchString(eventID, 7, 'ab730e7076afd4c1be7f21cabdc8b507', 'modified');
     let profileDescription = "Hmm. Looks like this team has been disbanded, abandoned, or is just getting started. Reach out to your supervisor to find out more information.";
 
-    $.getJSON(marvelAPIC, function(result) {
+    $.getJSON(marvelAPIC, function (result) {
         resultData = populateMemberProfile(result.data.results);
         console.log(resultData);
-    }).done(function(response) {
-        // if (resultData > 1) {
-        //     profileDescription = resultData;
-        // }
+    }).done(function (response) {
+        console.log(response, response.data.results.length);
+        if (response.data.results.length < 1) {
+            resultData = profileDescription;
+             console.log(resultData);
+        }
     })
 };
 
@@ -96,9 +93,9 @@ function populateMemberProfile(data) {
         console.log(data[i].id);
         const appendText = $(`<li class="newLI"><span>${teamMemberName}</span>${description}<button class="projectButton">Projects</button></li>`).appendTo(newUL);
     }
-    $('.projectButton').on('click', function() {
-      let i = $(this).closest('.memberProfile').index();
-        getCharacterID(i);
+    $('.projectButton').on('click', function () {
+        let i = $(this).closest('.memberProfile').index();
+        displayCharacterProjects(i);
     });
     return data;
 }
@@ -111,10 +108,9 @@ function populateMemberProfile(data) {
 // ^^ this didn't work for some reason
 
 // grab characterID so I can then use the ID to grab the Series
-function getCharacterID(id) {
+function displayCharacterProjects(id) {
     $(".profilePage").empty();
     console.log("id: " + id, resultData);
-    // const characterID = (resultData[i].id);
     apiCallSeries(id);
 }
 // ^^ so far it empties the page but it won't call the apiCallSeries function well
@@ -122,20 +118,24 @@ function getCharacterID(id) {
 
 // search for Series using API
 function createSeriesSearchString(id, limit, key, modified) {
-    return 'https://gateway.marvel.com:443/v1/public/characters/' + id + '/series?orderBy=' + modified + '&limit=' + limit + '&apikey=' + key;
-}
+    
+    let k = 'https://gateway.marvel.com:443/v1/public/characters/' + id + '/series?orderBy=' + modified + '&limit=' + limit + '&apikey=' + key;
+    console.log(k);
+    return k;
+    }
 
 // actually call the API that will grab the Series/Projects
 function apiCallSeries(id) {
-    const marvelAPIS = createSeriesSearchString(id, 7, 'ab730e7076afd4c1be7f21cabdc8b507', 'modified');
-    let profileDescription = "Hmm. Looks like your team member hasn't had a lot going on. Maybe they like to keep to themselves. Reach out to your team member to find out if they're looking for a chance to get more involved or prefer to work on their own private projects.";
+    console.log(id);
+    const marvelAPIS = createSeriesSearchString(id, 7, 'ab730e7076afd4c1be7f21cabdc8b507', 'title');
+    let projectDescription = "Hmm. Looks like your team member hasn't had a lot going on. Maybe they like to keep to themselves. Reach out to your team member to find out if they're looking for a chance to get more involved or prefer to work on their own private projects.";
 
-    $.getJSON(marvelAPIS, function(result) {
+    $.getJSON(marvelAPIS, function (result) {
         populateProjectProfile(result.data.results);
-    }).done(function(response) {
-        if (result.data.results > 1) {
-            projectDescription = result.data.results;
-        }
+    }).done(function (response) {
+        // if (result.data.results > 1) {
+        //     projectDescription = result.data.results;
+        // }
     })
 };
 
@@ -147,10 +147,10 @@ function populateProjectProfile(data) {
     const projHead = $('.projectHeader');
     const projectPhotos = $('.largerImageBox');
     const Projects = $('.projectProfile');
-    
+
     let newUL = document.createElement("UL");
     newUL.className = "projectHeader";
-    
+
     let newUL2 = document.createElement("UL");
     newUL2.className = "projectProfile";
 
@@ -184,12 +184,23 @@ function populateProjectProfile(data) {
     }
 }
 
-// event listener for whos who button
-$('.whosWho').on('click', function(whosWho) {
-});
+
 
 // function that makes the whosWho nav bar item display the new page
 function whosWho() {
-  $('section').hide();
-  $('#whosWhoPage').show();
+    $('section').hide();
+    $('#whosWhoPage').show();
 }
+
+
+// catch all document ready function that calls other functions
+$(function () {
+    // event listener for whos who button
+    $('.whosWho').on('click', function (whosWho) {});
+    $('.whoswhoPage').hide();
+    //populate dropdown and initial data for view
+    apiCallTeams();
+    getEventId();
+
+
+});
